@@ -1,13 +1,18 @@
 <html>
 <head>
     <title>The Swarm of the PacMen</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div>
-        <button id="addButton" onclick='makeOne()' width='200' height='30'>Add PacMan</button>
-        <button id="startButton" onclick='removeButtonAndStart()' width='200' height='30'>Start Game</button>
+    <div id="button-container" class="button-container">
+        <div>
+            <button id="startButton" class="button" onclick='removeButtonAndStart()' width='200' height='30'>Start Game</button>
+            <div id="Score"></div>
+        </div>
     </div>
-    <div id='game'></div>
+    <div id="container" class="container">
+        <div id='game'></div>
+    </div>
     <script src="PacMen.js"></script>
 </body>
 
