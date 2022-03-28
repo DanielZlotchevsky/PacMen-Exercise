@@ -62,12 +62,12 @@ function pacCycle(array, item) {
 }
 
 function fruitCycle(array, item) {
-    
     if (item.fruitClock == 0) {
         item.fruitClock += 1;
         return array[0];
+        
     }
-    if (item.fruitClock = 1) {
+    if (item.fruitClock == 1) {
         item.fruitClock += 1;
         return array[1];
     }
@@ -75,7 +75,7 @@ function fruitCycle(array, item) {
         item.fruitClock += 1;
         return array[2];
     }
-    if (item.fruitClock = 3) {
+    if (item.fruitClock == 3) {
         item.fruitClock = 0;
         return array[3];
     }
@@ -98,9 +98,6 @@ function pacAngle(item) {
 function makePac() {
     let velocity = setToRandomV(20);
     let position = setToRandomPos(marginLeft, marginRight, marginTop, marginBottom);
-    console.log(`width start: ${marginLeft} Width end: ${marginRight} X Pos: ${position.x}`)
-    
-    console.log(`Height start: ${marginTop} Height end: ${marginBottom} X Pos: ${position.y}`)
     var cycleTimer = 0; //used to determin pacCycle function
     // Add image to div id = game
     let game = document.getElementById('game');
@@ -111,7 +108,6 @@ function makePac() {
     newimg.width = 100;
     newimg.style.left = position.x;
     newimg.style.top = position.y;
-    console.log(newimg.style.left)
     game.appendChild(newimg);
     
     
@@ -167,6 +163,10 @@ function checkCollisions(item) {
         item.newimg.style.transform = `rotate(0deg)`;
         item.newimg.style.transform = `rotate(${pacAngle(item)})`;
     }
+    if (fruit[0].newFruit.style.left < item.position.x + item.velocity.x + item.newimg.width < (fruit[0].newFruit.style.left + 50) ||
+        fruit[0].newFruit.style.top < item.position.y + item.velocity.y + item.newimg.height < (fruit[0].newFruit.style.top + 50)) {
+        console.log(test)
+        }
 }
 
 
@@ -187,18 +187,19 @@ function removeButtonAndStart(){
 }
 
 
-/*------------------------------------------------------------Cursor Follow------------------------------------------------------------------------*/
+/*------------------------------------------------------------Fruits------------------------------------------------------------------------*/
 
 function makeOneFruit() {
     fruit.push(makeFruit()); // add a new Fruit
 }
 
 function makeFruit () {
+    let position = setToRandomPos(marginLeft, marginRight, marginTop, marginBottom);
     let game = document.getElementById('game');
     let newFruit = document.createElement('img');
     newFruit.style.position = 'absolute';
     newFruit.src = 'Apple.png';
-    newFruit.width = 100;
+    newFruit.width = 50;
     var fruitClock = 0;
     newFruit.style.left = '900px';
     newFruit.style.top = '250px';
@@ -206,8 +207,6 @@ function makeFruit () {
 
 
     return {
-        position,
-        velocity,
         newFruit,
         fruitClock
     }
@@ -215,7 +214,7 @@ function makeFruit () {
 
 function updateFruitImg() {
     fruit.forEach((item) => {      
-        item.newimg.src = fruitCycle(fruitArray, item);    
+        item.newFruit.src = fruitCycle(fruitArray, item);    
     })
     
     setTimeout(updateFruitImg, 500);
@@ -234,9 +233,10 @@ function checkCollisionsFruit(item) {
 
         function newFunction() {
             pacMen.forEach((pac) => {
-                if (Number(item.style.left) < Number(pac.position.x + pac.velocity.x + pac.newimg.width) < Number(item.style.left) + 100 ||
-                    Number(item.style.top) < Number(pac.position.y + pac.velocity.y + pac.newimg.height) < Number(item.style.top) + 100) {
-                    clearTimeout(update);
+                if (Number(item.newFruit.style.left) < Number(pac.position.x + pac.velocity.x + pac.newimg.width) < Number(item.newFruit.style.left) + 100 ||
+                    Number(item.newFruit.style.top) < Number(pac.position.y + pac.velocity.y + pac.newimg.height) < Number(item.newFruit.style.top) + 100) {
+                    console.log(test)
+                        clearTimeout(update);
                     clearTimeout(scoreKeep);
                     window.alert(`CONGRATS!! Your score is: ${score}`);
                 }
@@ -253,21 +253,64 @@ function scoreKeep() {
 }
 
 function pacmanMakeTimer() {
+    if (pacMen.length < 30) {
     makeOne()
-    setTimeout(makeOne, 2000)
+    setTimeout(pacmanMakeTimer, 2000)
+    } else {return}
 }
 
-document.body.addEventListener("mousemove", (event) => {
+document.onkeydown = checkKey;
 
-    /* ClientX and ClientY return the position of clients cursor from top left of the screen*/
-    var x = event.clientX;
-    var y = event.clientY;
+function checkKey(e) {
 
-    while ( marginLeft < x < marginRight && marginTop < y < marginBottom ) {
-        if (fruit.length > 0) {
-        fruit[0].style.left = `${x - 50}px`;
-        fruit[0].style.top = `${y - 50}px`;
-        }
+    e = e || window.event;
+
+    if (e.keyCode === 38) {
+        console.log('up');
+        // up arrow
+        fruit.forEach((item) => {
+            item.newFruit.style.top = (Number(item.newFruit.style.top) - 10) + 'px';
+        });
     }
-    
-});
+    else if (e.keyCode === 40) {
+        console.log('down');
+        // down arrow
+        fruit.forEach((item) => {
+            item.newFruit.style.top = (Number(item.newFruit.style.top) + 10) + 'px';
+        });
+    }
+    else if (e.keyCode === 37) {
+        console.log('left');
+       // left arrow
+       fruit.forEach((item) => {
+        item.newFruit.style.left = (Number(item.newFruit.style.left) - 10) + 'px';
+    });
+    }
+    else if (e.keyCode === 39) {
+        console.log('right');
+       // right arrow
+       fruit.forEach((item) => {
+        item.newFruit.style.left = (Number(item.newFruit.style.left) + 10) + 'px';
+    });
+    }
+
+}
+
+/*
+function mouseTrack(){
+    document.body.addEventListener("mousemove", (event) => {
+
+        // ClientX and ClientY return the position of clients cursor from top left of the screen
+        var x = (event.clientX - 25) + 'px';
+        var y = (event.clientY - 25) + 'px';
+        
+
+        while ( marginLeft < x < marginRight && marginTop < y < marginBottom ) {
+            fruit.forEach((item) => {
+                item.newFruit.style.left = x;
+                item.newFruit.style.top = y;
+            });
+        };
+    });
+};
+*/
