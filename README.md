@@ -5,7 +5,9 @@ This program simply allows you to spawn multiple Pacmen and have them bounce aro
 the images to each face the same direction and angle of its movement as well as the cycling of images to animate the mouth opening and closing.
 
 ## How to Run
-After installing the code on your machine, simply drag the file into your browser to begin playing.
+After installing the code on your machine, simply drag the file into your browser to begin.
+The Add Pacman button will add a pacman to the window.
+The Start Game button will begin running the movement program.
 
 ## Potential Future updates
 Possible updates may include the implimentation of random berries that spawn and give a boost to the first PacMan to touch it, as well as updating
